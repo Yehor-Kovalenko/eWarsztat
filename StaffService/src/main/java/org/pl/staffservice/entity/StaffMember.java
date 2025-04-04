@@ -1,13 +1,15 @@
 package org.pl.staffservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "staff_member")
 public class StaffMember {
@@ -19,6 +21,20 @@ public class StaffMember {
     private String phoneNumber;
     private String position;
     private double salary;
-    private TimeTable timeTable;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TimeTable> timeTable;
+
+    @Override
+    public String toString() {
+        return "StaffMember{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", position='" + position + '\'' +
+                ", salary=" + salary +
+                '}';
+    }
 }

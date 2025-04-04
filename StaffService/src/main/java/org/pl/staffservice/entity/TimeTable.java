@@ -1,24 +1,26 @@
 package org.pl.staffservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 @Entity
 @Table(name = "time_table")
 public class TimeTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    @ElementCollection
-    private ArrayList<Calendar> times = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "staff_id")
+    @JsonBackReference
+    private StaffMember staffMember;
 }
