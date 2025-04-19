@@ -1,5 +1,6 @@
 package org.pl.staffservice.service;
 
+import jakarta.transaction.Transactional;
 import org.pl.staffservice.entity.StaffMember;
 import org.pl.staffservice.repository.StaffMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class StaffMemberService {
         this.staffMemberRepository = staffMemberRepository;
     }
 
-    public Optional<StaffMember> getMemberById(Long id) {
+    public Optional<StaffMember> getMemberById(Long id) throws IllegalArgumentException {
         return this.staffMemberRepository.findById(id);
     }
 
@@ -25,11 +26,20 @@ public class StaffMemberService {
         return this.staffMemberRepository.findAll();
     }
 
-    public StaffMember addStaffMember(StaffMember staffMember) {
+    @Transactional
+    public StaffMember saveStaffMember(StaffMember staffMember) {
         return this.staffMemberRepository.save(staffMember);
     }
 
+    @Transactional
     public void deleteStaffMemberById(Long id) {
-        this.staffMemberRepository.deleteById(id);
+        if (!staffMemberRepository.existsById(id)) {
+            throw new IllegalArgumentException("Staff member with ID " + id + " not found");
+        }
+        staffMemberRepository.deleteById(id);
+    }
+
+    public List<StaffMember> getStaffByPosition(String position) {
+        return staffMemberRepository.findByPosition(position);
     }
 }

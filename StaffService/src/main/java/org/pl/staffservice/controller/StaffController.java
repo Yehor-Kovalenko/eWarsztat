@@ -3,13 +3,11 @@ package org.pl.staffservice.controller;
 import org.pl.staffservice.entity.StaffMember;
 import org.pl.staffservice.service.StaffMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/staff")
@@ -27,25 +25,37 @@ public class StaffController {
         return ResponseEntity.ok(staffMembers);
     }
 
-    @GetMapping("/staffMember")
-    public ResponseEntity<?> getStaffMember(@RequestBody Long id) {
-        StaffMember staffMember = this.staffMemberService.getMemberById(id).orElse(null);
-        if (staffMember == null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Staff member with this id could not be found");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        } else {
-            return ResponseEntity.ok(staffMember);
-        }
+    @PostMapping("/{id}")
+    public ResponseEntity<?> getStaffMember(@PathVariable Long id) {
+        Optional<StaffMember> staffMember = staffMemberService.getMemberById(id);
+        return staffMember.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/staffMember")
-    public ResponseEntity<?> deleteStaffMemberById(@RequestBody Long id) {
-        try{
-            this.staffMemberService.deleteStaffMemberById(id);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+    @PostMapping("/new")
+    public ResponseEntity<?> createStaffMember(@RequestBody StaffMember staffMember) {
+        StaffMember newMember = staffMemberService.saveStaffMember(staffMember);
+        return ResponseEntity.ok(newMember);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStaffMemberById(@PathVariable Long id) {
+        staffMemberService.deleteStaffMemberById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    //staff availability
+    @PostMapping("/{id}/availability")
+    public ResponseEntity<?> getStaffAvailability(@PathVariable Long id) {
+        Optional<StaffMember> staff = staffMemberService.getMemberById(id);
+        return staff.map(member -> ResponseEntity.ok(member.getTimeTable()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    //get staff by position
+    @GetMapping("/role/{position}")
+    public ResponseEntity<?> getStaffByRole(@PathVariable String position) {
+        List<StaffMember> staff = staffMemberService.getStaffByPosition(position);
+        return ResponseEntity.ok(staff);
     }
 }
