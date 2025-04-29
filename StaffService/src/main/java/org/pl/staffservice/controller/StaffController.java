@@ -3,6 +3,7 @@ package org.pl.staffservice.controller;
 import org.pl.staffservice.entity.StaffMember;
 import org.pl.staffservice.service.StaffMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,7 @@ public class StaffController {
     public StaffController(StaffMemberService staffMemberService) {
         this.staffMemberService = staffMemberService;
     }
-
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllStaffMembers() {
         List<StaffMember> staffMembers = this.staffMemberService.getAllStaffMembers();
         return ResponseEntity.ok(staffMembers);
