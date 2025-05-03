@@ -1,9 +1,9 @@
 package org.pl.staffservice.controller;
 
 import org.pl.staffservice.entity.StaffMember;
+import org.pl.staffservice.entity.TimeTable;
 import org.pl.staffservice.service.StaffMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
