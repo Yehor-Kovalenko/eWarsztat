@@ -1,5 +1,18 @@
 # eWarsztat
 ---
+## Manual
+1. Running SonarQube Server: `docker-compose up` (add `-d` flag for background run)
+2. Open `http://localhost:9000` login with default username `admin` and password `admin` and change to your own password
+3. Under section **Security** generate the API token and paste in the sonar-project.properties file
+4. Run the SonarQube scanner on the project:
+```bash
+# Run the scanner which will exit after finish
+docker run --rm -v "${pwd}:/usr/src" sonarsource/sonar-scanner-cli
+```
+5. After scan is complete open the `http://localhost:9000`, login, Go to Projects to see the result
+6. To turn off the SonarQube server run `docker compose down`
+---
+
 ## Cel
 
 Aplikacja do zarządzania warsztatem samochodowym. Aplikacja powinna pozwalać na możliwość rezerwacji wizyty w warsztacie, monitorowanie statusu naprawy oraz możliwość przeprowadzenia opłat za naprawę.
