@@ -1,0 +1,14 @@
+services:
+  postgres:
+    build: .
+    container_name: microservices-dbs
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "9999:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # persists the DB data
+
+volumes:
+  pgdata:
