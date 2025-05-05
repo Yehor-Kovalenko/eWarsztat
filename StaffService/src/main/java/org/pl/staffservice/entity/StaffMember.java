@@ -22,10 +22,6 @@ public class StaffMember {
     private String position;
     private double salary;
 
-    public List<TimeTable> getTimeTable() {
-        return timeTable;
-    }
-
     @JsonManagedReference
     @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TimeTable> timeTable;
