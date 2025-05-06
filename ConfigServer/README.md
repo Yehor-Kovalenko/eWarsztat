@@ -2,7 +2,7 @@ Config server allows other service to use the configs that were shipped by this 
 In order to be able to receive the configs form the server client should have included this in their `application.properties`:
 
 ```
-spring.config.import=configserver:http://localhost:8082
+spring.config.import=optional:configserver:http://localhost:8082
 ```
 
 Config server has stores all config files that are ready to be shipped in the `resources/config` folder. That folder can contain some files:
