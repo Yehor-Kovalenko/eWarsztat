@@ -30,3 +30,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+./SecurityService/src/main/resources/google_oauth.json
