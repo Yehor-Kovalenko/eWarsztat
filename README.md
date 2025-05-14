@@ -14,12 +14,24 @@ docker run --rm -v "${pwd}:/usr/src" sonarsource/sonar-scanner-cli
 ---
 ## Manual for databases running
 Run from the root project level (if it is not the first build you do not need the `--build` flag): 
-```bash
+```shell
 docker-compose -f database/docker-compose.yml up --build
 ```
 ---
-
-
+---
+## Manual for running mutation tests
+```shell
+mvn verify
+```
+---
+ALTERNATIVE
+1. Compile and build the module
+2. Run
+```shell
+mvn org.pitest:pitest-maven:mutationCoverage
+```
+---
+---
 ## Cel
 
 Aplikacja do zarządzania warsztatem samochodowym. Aplikacja powinna pozwalać na możliwość rezerwacji wizyty w warsztacie, monitorowanie statusu naprawy oraz możliwość przeprowadzenia opłat za naprawę.
