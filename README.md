@@ -18,6 +18,8 @@ Run from the root project level (if it is not the first build you do not need th
 docker-compose -f database/docker-compose.yml up --build
 ```
 ---
+## OpenAPI docs
+Go under endpoint of the apigateway service to the url `<api-gateway-base-url/swagger-ui.html`
 ---
 ## Manual for running mutation tests
 ```shell
