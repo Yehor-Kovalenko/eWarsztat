@@ -27,7 +27,25 @@
 		<license/>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<name>Yehor Kovalenko</name>
+			<roles>
+				<role>Project Manager</role>
+				<role>Fullstack developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Franciszek Reniecki</name>
+			<roles>
+				<role>Fullstack developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Andrei Pivavarau</name>
+			<roles>
+				<role>Fullstack developer</role>
+			</roles>
+		</developer>
 	</developers>
 	<properties>
 		<java.version>23</java.version>
