@@ -19,10 +19,10 @@ public class KeycloakService {
     private final String logoutUri;
 
     public KeycloakService(WebClient keycloakWebClient,
-                           @Value("${keycloak.client-id}") String clientId,
-                           @Value("${keycloak.client-secret}") String clientSecret,
-                           @Value("${keycloak.token-uri}") String tokenUri,
-                           @Value("${keycloak.logout-uri}") String logoutUri) {
+                           @Value("eWarsztat") String clientId,
+                           @Value("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") String clientSecret,
+                           @Value("http://localhost:9000/realms/myrealm/protocol/openid-connect/token") String tokenUri,
+                           @Value("http://localhost:9000/realms/myrealm/protocol/openid-connect/logout") String logoutUri) {
         this.keycloakWebClient = keycloakWebClient;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
