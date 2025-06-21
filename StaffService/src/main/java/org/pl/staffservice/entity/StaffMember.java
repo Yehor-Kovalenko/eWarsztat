@@ -19,8 +19,17 @@ public class StaffMember {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String email;
     private String position;
     private double salary;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @JsonManagedReference
     @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -2,6 +2,7 @@ package org.pl.staffservice.service;
 
 import jakarta.transaction.Transactional;
 import org.pl.staffservice.entity.StaffMember;
+import org.pl.staffservice.entity.TimeTable;
 import org.pl.staffservice.repository.StaffMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,21 @@ public class StaffMemberService {
         return this.staffMemberRepository.findById(id);
     }
 
+    public Optional<StaffMember> getMemberByEmail(String email) throws IllegalArgumentException {
+        return this.staffMemberRepository.findByEmail(email);
+    }
+
     public List<StaffMember> getAllStaffMembers() {
         return this.staffMemberRepository.findAll();
     }
 
     @Transactional
     public StaffMember saveStaffMember(StaffMember staffMember) {
+        if (staffMember.getTimeTable() != null) {
+            for (TimeTable timeTable : staffMember.getTimeTable()) {
+                timeTable.setStaffMember(staffMember);
+            }
+        }
         return this.staffMemberRepository.save(staffMember);
     }
 

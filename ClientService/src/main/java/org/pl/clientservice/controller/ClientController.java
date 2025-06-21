@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.pl.clientservice.entity.Client;
 import org.pl.clientservice.entity.Vehicle;
 import org.pl.clientservice.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ClientController {
 
+    @Autowired
     private final ClientService clientService;
 
     @PostMapping
