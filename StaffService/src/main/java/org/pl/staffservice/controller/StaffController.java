@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -74,5 +76,55 @@ public class StaffController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/vehicles")
+    public ResponseEntity<?> getStaffMemberVehicles(@RequestBody String email) {
+        try {
+            List<String> vehicles = staffMemberService.getVehiclesByStaffMemberEmail(email);
+            Map<String, List<String>> response = new HashMap<>();
+            response.put("vehicles", vehicles);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body("No employee found");
+        }
+    }
+
+    @GetMapping("/{staffMemberId}/vehicles/{vehicleId}")
+    public ResponseEntity<?> addVehicle(@PathVariable Long staffMemberId, @PathVariable String vehicleId) {
+        boolean added = staffMemberService.addVehicleToStaffMember(staffMemberId, vehicleId);
+        if (added) {
+            return ResponseEntity.ok()
+                    .body(Map.of("message", "Vehicle " + vehicleId + " successfully added to staff member " + staffMemberId,
+                            "success", true));
+        } else {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Failed to add vehicle. Either staff member not found or vehicle already assigned.",
+                            "success", false));
+        }
+    }
+
+    @DeleteMapping("/{staffMemberId}/vehicles/{vehicleId}")
+    public ResponseEntity<?> removeVehicle(@PathVariable Long staffMemberId, @PathVariable String vehicleId) {
+        boolean removed = staffMemberService.removeVehicleFromStaffMember(staffMemberId, vehicleId);
+
+        if (removed) {
+            return ResponseEntity.ok()
+                    .body(Map.of("message", "Vehicle " + vehicleId + " successfully removed from staff member " + staffMemberId,
+                            "success", true));
+        } else {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Failed to remove vehicle. Either staff member not found or vehicle not assigned.",
+                            "success", false));
+        }
+    }
+
+    @GetMapping("/{staffMemberId}/vehicles")
+    public ResponseEntity<?> getStaffMemberVehicles(@PathVariable Long staffMemberId) {
+        List<String> vehicles = staffMemberService.getVehiclesByStaffMemberId(staffMemberId);
+
+        return ResponseEntity.ok()
+                .body(Map.of("staffMemberId", staffMemberId,
+                        "vehicles", vehicles,
+                        "count", vehicles.size()));
     }
 }
