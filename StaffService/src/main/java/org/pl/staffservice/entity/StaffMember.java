@@ -42,14 +42,17 @@ public class StaffMember {
 
     @Override
     public String toString() {
-        return "StaffMember{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", position='" + position + '\'' +
-                ", salary=" + salary +
-                '}';
+        return """
+       StaffMember{
+           id=%d,
+           firstName='%s',
+           lastName='%s',
+           phoneNumber='%s',
+           position='%s',
+           salary=%.2f
+       }
+       """.formatted(id, firstName, lastName, phoneNumber, position, salary);
+
     }
 
     public Long getId() {

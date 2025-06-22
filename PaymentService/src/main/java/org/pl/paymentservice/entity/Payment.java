@@ -24,13 +24,16 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", clients=" + clients +
-                ", amount=" + amount +
-                ", currency='" + currency + '\'' +
-                ", date=" + date +
-                '}';
+        return """
+       Payment{
+           id=%d,
+           clients=%s,
+           amount=%.2f,
+           currency='%s',
+           date=%s
+       }
+       """.formatted(id, clients, amount, currency, date);
+
     }
 
     public Long getId() {

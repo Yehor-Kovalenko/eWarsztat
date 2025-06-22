@@ -40,15 +40,13 @@ public class UserFlowsController {
     @PostMapping("/register-visit")
     public ResponseEntity<String> registerClientVisit(@RequestBody VisitRequest visitRequest) throws JsonProcessingException {
         /**
-         * 1. Login (Create Client TODO)
+         * 1. Login (Create Client)
          * 2. Create Visit details
          * 3. Assign employee
          * 4. After the visit generate user invoice endpoint
          */
         // we will pass client email, using the client service we will find his id, and then vehicle i d(by its name) and then employee id by his name and combine that stuff together
-//        String clientUrl = discoveryClient.getNextServerFromEureka("CLIENT-SERVICE", false).getHomePageUrl();
         String staffUrl = discoveryClient.getNextServerFromEureka("STAFF-SERVICE", false).getHomePageUrl();
-//        String apiGatewayUrl = discoveryClient.getNextServerFromEureka("API-GATEWAY", false).getHomePageUrl();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
 
