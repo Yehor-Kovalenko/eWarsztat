@@ -52,4 +52,9 @@ public class StaffMemberService {
     public List<StaffMember> getStaffByPosition(String position) {
         return staffMemberRepository.findByPosition(position);
     }
+
+    public Long getStaffMemberIdByVehicleId(String vehicleId) {
+        Optional<StaffMember> staffMember = staffMemberRepository.findFirstByVehiclesContaining(vehicleId);
+        return staffMember.map(StaffMember::getId).orElse(null);
+    }
 }

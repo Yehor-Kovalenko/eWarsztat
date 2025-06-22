@@ -64,4 +64,15 @@ public class StaffController {
         List<StaffMember> staff = staffMemberService.getStaffByPosition(position);
         return ResponseEntity.ok(staff);
     }
+
+    @GetMapping("/by-vehicle/{vehicleId}")
+    public ResponseEntity<Long> getStaffMemberByVehicle(@PathVariable String vehicleId) {
+        Long staffMemberId = staffMemberService.getStaffMemberIdByVehicleId(vehicleId);
+
+        if (staffMemberId != null) {
+            return ResponseEntity.ok(staffMemberId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

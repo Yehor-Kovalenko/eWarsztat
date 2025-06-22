@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface StaffMemberRepository extends JpaRepository<StaffMember, Long> {
     List<StaffMember> findByPosition(String position);
     Optional<StaffMember> findByEmail(String email);
+    Optional<StaffMember> findFirstByVehiclesContaining(String vehicleId);
 }
