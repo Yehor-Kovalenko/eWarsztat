@@ -23,6 +23,12 @@ public class GatewaySecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/webjars/swagger-ui/**",
+                                "/swagger-ui.html/**",
+                                "/**").permitAll()
                         .pathMatchers("/security/admin/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )

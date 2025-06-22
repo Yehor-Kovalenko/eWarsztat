@@ -1,4 +1,4 @@
-package org.pl.staffservice;
+package org.pl.clientservice;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

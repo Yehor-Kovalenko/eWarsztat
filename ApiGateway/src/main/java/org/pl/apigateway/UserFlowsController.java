@@ -45,6 +45,7 @@ public class UserFlowsController {
          * 3. Assign employee
          * 4. After the visit generate user invoice endpoint
          */
+        //TODO currently logged in user
         // we will pass client email, using the client service we will find his id, and then vehicle i d(by its name) and then employee id by his name and combine that stuff together
         String staffUrl = discoveryClient.getNextServerFromEureka("STAFF-SERVICE", false).getHomePageUrl();
         HttpHeaders headers = new HttpHeaders();

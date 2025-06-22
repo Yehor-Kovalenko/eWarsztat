@@ -31,13 +31,10 @@ public class AuthInterceptor implements GlobalFilter, Ordered {
         if (path.equals("/api/login") || path.equals("/api/register") || path.contains("webjars/swagger-ui/index.html") || path.contains("swagger-ui") || path.contains("v3/api-docs")) {
             return chain.filter(exchange);
         }
-        // Also skip actuator, swagger, etc., if needed:
-        // if (path.startsWith("/actuator")) return chain.filter(exchange);
 
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
-            // Optionally write a response body
             byte[] bytes = "Missing or invalid Authorization header".getBytes();
             exchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);
             return exchange.getResponse().writeWith(Mono.just(exchange.getResponse()
