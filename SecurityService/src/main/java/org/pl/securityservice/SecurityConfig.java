@@ -26,7 +26,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(auth -> auth
-                        .pathMatchers("/auth/token", "/auth/validate", "/auth/logout", "/auth/register").permitAll()
+                        .pathMatchers("/auth/token", "/auth/validate", "/auth/logout", "/auth/register",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/webjars/swagger-ui/**",
+                                "/swagger-ui.html/**").permitAll()
                         .pathMatchers("/admin/**").hasRole("ADMIN")
                         .pathMatchers("/employee/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .pathMatchers("/client/**").hasAnyRole("CLIENT", "EMPLOYEE", "ADMIN")

@@ -28,7 +28,7 @@ public class AuthInterceptor implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
         // Skip login/register paths on the gateway itself
-        if (path.equals("/api/login") || path.equals("/api/register")) {
+        if (path.equals("/api/login") || path.equals("/api/register") || path.contains("webjars/swagger-ui/index.html") || path.contains("swagger-ui") || path.contains("v3/api-docs")) {
             return chain.filter(exchange);
         }
         // Also skip actuator, swagger, etc., if needed:
