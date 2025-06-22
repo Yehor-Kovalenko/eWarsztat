@@ -1,7 +1,7 @@
 package org.pl.securityservice;
 
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,62 +13,65 @@ import java.util.Set;
 @Service
 public class JwtValidationService {
 
-    private final JwtDecoder jwtDecoder;
+    private final ReactiveJwtDecoder jwtDecoder;
 
-    public JwtValidationService(JwtDecoder jwtDecoder) {
+    public JwtValidationService(ReactiveJwtDecoder jwtDecoder) {
         this.jwtDecoder = jwtDecoder;
     }
 
     /**
-     * Validate the token, decode it, and return the Jwt object if valid.
+     * Reactive validation of JWT token.
+     * @param token the JWT token as a string
+     * @return Mono emitting Jwt if valid, error otherwise
      */
-    public Jwt validateToken(String token) {
-        // This will throw JwtException (e.g. BadJwtException) if invalid (signature, expired, etc).
-        // For synchronous approach. If you want reactive, you could wrap in Mono.fromCallable(...)
+    public Mono<Jwt> validateToken(String token) {
         return jwtDecoder.decode(token);
     }
 
     /**
-     * Extract roles from the Jwt.
-     * Depending on Keycloak token structure, roles may be under:
-     * - "realm_access": {"roles": [...]}
-     * - "resource_access": { "<client-id>": {"roles": [...]} }
-     *
-     * Return a Set<String> of roles.
+     * Extract roles from a Jwt object.
+     * Parses both realm and client-specific roles.
      */
     public Set<String> extractRoles(Jwt jwt) {
         Set<String> roles = new HashSet<>();
-        // Example: realm roles
+
+        // Realm roles
         Object realmAccess = jwt.getClaims().get("realm_access");
         if (realmAccess instanceof Map<?, ?> raMap) {
             Object rolesObj = raMap.get("roles");
             if (rolesObj instanceof Collection<?>) {
                 for (Object r : (Collection<?>) rolesObj) {
-                    if (r instanceof String) {
-                        roles.add((String) r);
+                    if (r instanceof String role) {
+                        roles.add(role);
                     }
                 }
             }
         }
-        // Example: client roles
+
+        // Client roles
         Object resourceAccess = jwt.getClaims().get("resource_access");
         if (resourceAccess instanceof Map<?, ?> resMap) {
-            for (Object entryObj : resMap.entrySet()) {
-                if (entryObj instanceof Map.Entry<?, ?> e) {
-                    Object v = e.getValue();
-                    if (v instanceof Map<?, ?> clientMap) {
-                        Object rObj = clientMap.get("roles");
-                        if (rObj instanceof Collection<?> roleList) {
-                            for (Object r : roleList) {
-                                if (r instanceof String) {
-                                    roles.add((String) r);
-                                }
+            for (Object value : resMap.values()) {
+                if (value instanceof Map<?, ?> clientMap) {
+                    Object rObj = clientMap.get("roles");
+                    if (rObj instanceof Collection<?> roleList) {
+                        for (Object r : roleList) {
+                            if (r instanceof String role) {
+                                roles.add(role);
                             }
                         }
                     }
                 }
             }
         }
+
         return roles;
+    }
+
+    /**
+     * Optionally provide a reactive version of extractRoles.
+     */
+    public Mono<Set<String>> extractRolesReactive(Jwt jwt) {
+        return Mono.fromCallable(() -> extractRoles(jwt));
     }
 }

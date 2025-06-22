@@ -26,8 +26,8 @@ public class KeycloakService {
         this.keycloakWebClient = keycloakWebClient;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.tokenUri = tokenUri;       // e.g. http://localhost:8080/realms/myrealm/protocol/openid-connect/token
-        this.logoutUri = logoutUri;     // e.g. http://localhost:8080/realms/myrealm/protocol/openid-connect/logout
+        this.tokenUri = tokenUri;
+        this.logoutUri = logoutUri;
     }
 
     /**
@@ -63,9 +63,5 @@ public class KeycloakService {
                 .bodyToMono(Void.class);
     }
 
-    // Optionally: implement introspection if Keycloak supports it
-    // If you prefer introspection instead of local JWT decoding:
-    // @Value("${keycloak.introspect-uri}") private String introspectUri;
-    // public Mono<IntrospectResponse> introspect(String token) { ... }
 }
 

@@ -26,15 +26,18 @@ public class AuthController {
     private final JwtValidationService jwtValidationService;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final KeycloakAdminService keycloakAdminService;
 
     public AuthController(KeycloakService keycloakService,
                           JwtValidationService jwtValidationService,
                           UserRepository userRepository,
-                          TokenRepository tokenRepository) {
+                          TokenRepository tokenRepository,
+                          KeycloakAdminService keycloakAdminService) {
         this.keycloakService = keycloakService;
         this.jwtValidationService = jwtValidationService;
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
+        this.keycloakAdminService = keycloakAdminService;
     }
 
     /**
@@ -91,7 +94,7 @@ public class AuthController {
         String token = authorization.substring(prefix.length());
         return Mono.fromCallable(() -> {
             try {
-                Jwt jwt = jwtValidationService.validateToken(token);
+                Jwt jwt = jwtValidationService.validateToken(token).block();
                 Set<String> userRoles = jwtValidationService.extractRoles(jwt);
                 // Determine required roles
                 List<String> required = new ArrayList<>();
@@ -152,6 +155,31 @@ public class AuthController {
                     LogoutResponse resp = new LogoutResponse();
                     resp.setSuccess(false);
                     resp.setMessage("Error during logout: " + ex.getMessage());
+                    return Mono.just(resp);
+                });
+    }
+
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
+        String username = registerRequest.getUsername();
+        String password = registerRequest.getPassword();
+        String email = registerRequest.getEmail();
+        // Wrap blocking Keycloak admin call into reactive Mono
+        return Mono.fromCallable(() -> {
+                    // Validate inputs
+                    if (username == null || username.isBlank() ||
+                            password == null || password.isBlank()) {
+                        throw new IllegalArgumentException("Username and password must be provided");
+                    }
+                    // Call KeycloakAdminService to create user
+                    keycloakAdminService.createUser(username, password, email);
+                    return new RegisterResponse(true, "User registered successfully");
+                })
+                .subscribeOn(Schedulers.boundedElastic())
+                .onErrorResume(ex -> {
+                    String msg = ex.getMessage();
+                    // If IllegalArgumentException or RuntimeException from createUser
+                    RegisterResponse resp = new RegisterResponse(false, "Registration failed: " + msg);
                     return Mono.just(resp);
                 });
     }

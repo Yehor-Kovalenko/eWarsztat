@@ -8,3 +8,4 @@ public class LogoutResponse {
     private boolean success;
     private String message;
 }
+
