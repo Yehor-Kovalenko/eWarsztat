@@ -20,7 +20,7 @@ public class KeycloakService {
 
     public KeycloakService(WebClient keycloakWebClient,
                            @Value("eWarsztat") String clientId,
-                           @Value("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") String clientSecret,
+                           @Value("FuUw3gWriPkghCzMFe410BoYXh6dwqKC") String clientSecret,
                            @Value("http://localhost:9000/realms/myrealm/protocol/openid-connect/token") String tokenUri,
                            @Value("http://localhost:9000/realms/myrealm/protocol/openid-connect/logout") String logoutUri) {
         this.keycloakWebClient = keycloakWebClient;
