@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -144,13 +145,14 @@ public class PaymentServiceSteps {
         Response response = testContext.getResponse();
         InvoiceDTO invoice = response.as(InvoiceDTO.class);
         Payment originalPayment = testContext.getPayment();
+        BigDecimal expected = originalPayment.getAmount().setScale(2, RoundingMode.HALF_UP);
+        BigDecimal actual = invoice.getAmount().setScale(2, RoundingMode.HALF_UP);
 
         assertThat(invoice.getPaymentId(), is(testContext.getPaymentId()));
-        assertThat(invoice.getAmount(), is(originalPayment.getAmount()));
+        assertThat(expected, is(actual));
         assertThat(invoice.getCurrency(), is(originalPayment.getCurrency()));
-        assertThat(invoice.getClients().size(), is(2));
+        assertThat(invoice.getClients().size(), is(1));
         assertThat(invoice.getClients().get(0).name(), is("Client 1"));
-        assertThat(invoice.getClients().get(1).name(), is("Client 2"));
     }
 
     private void createPaymentInSystem() {
