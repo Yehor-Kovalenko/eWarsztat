@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,6 +23,10 @@ public class StaffMember {
     private String email;
     private String position;
     private double salary;
+    @ElementCollection
+    @CollectionTable(name =  "staff_member_vehicles", joinColumns = @JoinColumn(name = "staff_member_id"))
+    @Column(name = "vehicle_id")
+    private List<String> vehicles = new ArrayList<>();
 
     public String getEmail() {
         return email;
