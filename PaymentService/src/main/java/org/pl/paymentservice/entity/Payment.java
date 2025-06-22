@@ -15,8 +15,8 @@ public class Payment {
     private Long id;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "Payment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Client> clients;
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    private Client client;
 
     private BigDecimal amount;
     private String currency;
@@ -32,7 +32,7 @@ public class Payment {
            currency='%s',
            date=%s
        }
-       """.formatted(id, clients, amount, currency, date);
+       """.formatted(id, client, amount, currency, date);
 
     }
 
@@ -44,16 +44,16 @@ public class Payment {
         this.id = id;
     }
 
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
-
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void setAmount(BigDecimal amount) {
