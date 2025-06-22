@@ -13,27 +13,10 @@ public class InvoiceDTO {
     private String currency;
     private List<ClientInfo> clients;
 
-    public static class ClientInfo {
-        private Long id;
-        private String name;
-        private String clientType;
-
-        public ClientInfo() {}
-        public ClientInfo(Long id, String name, String clientType) {
-            this.id = id;
-            this.name = name;
-            this.clientType = clientType;
-        }
-
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getClientType() { return clientType; }
-        public void setClientType(String clientType) { this.clientType = clientType; }
-    }
+    public record ClientInfo (
+        Long id,
+        String name,
+        String clientType){}
     
     public Long getPaymentId() { return paymentId; }
     public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }

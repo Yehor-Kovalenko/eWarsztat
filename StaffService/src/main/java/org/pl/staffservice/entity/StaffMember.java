@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,8 +20,21 @@ public class StaffMember {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String email;
     private String position;
     private double salary;
+    @ElementCollection
+    @CollectionTable(name =  "staff_member_vehicles", joinColumns = @JoinColumn(name = "staff_member_id"))
+    @Column(name = "vehicle_id")
+    private List<String> vehicles = new ArrayList<>();
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @JsonManagedReference
     @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -28,14 +42,17 @@ public class StaffMember {
 
     @Override
     public String toString() {
-        return "StaffMember{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", position='" + position + '\'' +
-                ", salary=" + salary +
-                '}';
+        return """
+       StaffMember{
+           id=%d,
+           firstName='%s',
+           lastName='%s',
+           phoneNumber='%s',
+           position='%s',
+           salary=%.2f
+       }
+       """.formatted(id, firstName, lastName, phoneNumber, position, salary);
+
     }
 
     public Long getId() {
