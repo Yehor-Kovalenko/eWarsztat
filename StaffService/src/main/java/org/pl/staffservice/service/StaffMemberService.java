@@ -54,6 +54,10 @@ public class StaffMemberService {
         return staffMemberRepository.findByPosition(position);
     }
 
+    public Long getStaffMemberIdByVehicleId(String vehicleId) {
+        Optional<StaffMember> staffMember = staffMemberRepository.findFirstByVehiclesContaining(vehicleId);
+        return staffMember.map(StaffMember::getId).orElse(null);
+}
     public List<String> getVehiclesByStaffMemberId(Long staffMemberId) {
         Optional<StaffMember> staffMember = getMemberById(staffMemberId);
         return staffMember.map(StaffMember::getVehicles).orElse(new ArrayList<>());

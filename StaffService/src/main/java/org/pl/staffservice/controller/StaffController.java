@@ -67,6 +67,16 @@ public class StaffController {
         return ResponseEntity.ok(staff);
     }
 
+    @GetMapping("/by-vehicle/{vehicleId}")
+    public ResponseEntity<Long> getStaffMemberByVehicle(@PathVariable String vehicleId) {
+        Long staffMemberId = staffMemberService.getStaffMemberIdByVehicleId(vehicleId);
+
+        if (staffMemberId != null) {
+            return ResponseEntity.ok(staffMemberId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     @GetMapping("/vehicles")
     public ResponseEntity<?> getStaffMemberVehicles(@RequestBody String email) {
         try {
