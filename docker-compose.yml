@@ -1,7 +1,7 @@
 services:
   sonarqube:
     image: sonarqube:community
-    container_name: sonarqube
+    container_name: eWarsztat-sonarqube
     ports:
       - "9000:9000"
     environment:
@@ -17,7 +17,7 @@ services:
 
   db:
     image: postgres:13
-    container_name: sonarqube_db
+    container_name: eWarsztat-sonarqube_db
     environment:
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar

@@ -31,6 +31,12 @@ public class StaffController {
         return staffMember.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @PostMapping("/email")
+    public ResponseEntity<?> getStaffMember(@RequestBody String email) {
+        Optional<StaffMember> staffMember = staffMemberService.getMemberByEmail(email);
+        return staffMember.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PostMapping("/new")
     public ResponseEntity<?> createStaffMember(@RequestBody StaffMember staffMember) {
