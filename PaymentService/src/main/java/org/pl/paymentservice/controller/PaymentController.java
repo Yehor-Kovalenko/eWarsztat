@@ -3,6 +3,7 @@ package org.pl.paymentservice.controller;
 import org.pl.paymentservice.InvoiceDTO;
 import org.pl.paymentservice.entity.Client;
 import org.pl.paymentservice.entity.Payment;
+import org.pl.paymentservice.service.ExternalExchangeRatesService;
 import org.pl.paymentservice.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ExternalExchangeRatesService externalExchangeRatesService;
 
     @GetMapping("/")
     public List<Payment> getAllPayments() {
@@ -64,5 +67,8 @@ public class PaymentController {
 
         return ResponseEntity.ok(invoice);
     }
-
+    @GetMapping("/exchange/rates")
+    public ResponseEntity<?> getExchangeRates() {
+        return ResponseEntity.ok(externalExchangeRatesService.getExchangeRates());
+    }
 }
