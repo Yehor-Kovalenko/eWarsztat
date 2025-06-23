@@ -17,7 +17,7 @@ import java.util.Map;
 public class ClientController {
 
     @Autowired
-    private final ClientService clientService;
+    private ClientService clientService;
 
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client) {
