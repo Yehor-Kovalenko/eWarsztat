@@ -164,23 +164,15 @@ public class AuthController {
         String username = registerRequest.getUsername();
         String password = registerRequest.getPassword();
         String email = registerRequest.getEmail();
-        // Wrap blocking Keycloak admin call into reactive Mono
-        return Mono.fromCallable(() -> {
-                    // Validate inputs
-                    if (username == null || username.isBlank() ||
-                            password == null || password.isBlank()) {
-                        throw new IllegalArgumentException("Username and password must be provided");
-                    }
-                    // Call KeycloakAdminService to create user
-                    keycloakAdminService.createUser(username, password, email);
-                    return new RegisterResponse(true, "User registered successfully");
-                })
-                .subscribeOn(Schedulers.boundedElastic())
+        if (username == null || username.isBlank() ||
+                password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Username and password must be provided");
+        }
+        return keycloakAdminService.createUser(username, password, email)
+                .then(Mono.just(new RegisterResponse(true, "User registered successfully")))
                 .onErrorResume(ex -> {
                     String msg = ex.getMessage();
-                    // If IllegalArgumentException or RuntimeException from createUser
-                    RegisterResponse resp = new RegisterResponse(false, "Registration failed: " + msg);
-                    return Mono.just(resp);
+                    return Mono.just(new RegisterResponse(false, "Registration failed: " + msg));
                 });
     }
 }

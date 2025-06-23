@@ -29,8 +29,12 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public Payment getPaymentById(@PathVariable Long id) {
-        return paymentService.getPaymentById(id);
+    public ResponseEntity<?> getPaymentById(@PathVariable Long id) {
+        Payment payment = paymentService.getPaymentById(id);
+        if (payment == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(payment);
     }
 
     @PostMapping("/admin/create")
@@ -63,7 +67,6 @@ public class PaymentController {
 
         return ResponseEntity.ok(invoice);
     }
-
     @GetMapping("/exchange/rates")
     public ResponseEntity<?> getExchangeRates() {
         return ResponseEntity.ok(externalExchangeRatesService.getExchangeRates());

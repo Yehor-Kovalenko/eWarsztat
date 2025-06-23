@@ -90,6 +90,7 @@ public class KeycloakAdminService {
             user.setUsername(username);
             user.setEmail(email);
             user.setEnabled(true);
+            user.setRequiredActions(Collections.emptyList());
 
             Response resp = usersResource.create(user);
             int status = resp.getStatus();
